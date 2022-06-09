@@ -4,12 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_question_detail.*
+import kotlinx.android.synthetic.main.list_question_detail.*
 import kotlinx.android.synthetic.main.list_questions.*
 
 class QuestionDetailActivity : AppCompatActivity() {
+
+//質問の詳細画面――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――●
 
     private lateinit var mQuestion: Question
     private lateinit var mAdapter: QuestionDetailListAdapter
@@ -17,6 +21,8 @@ class QuestionDetailActivity : AppCompatActivity() {
 
     private val mEventListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+
+
             val map = dataSnapshot.value as Map<*, *>
 
             val answerUid = dataSnapshot.key ?: ""
@@ -42,8 +48,8 @@ class QuestionDetailActivity : AppCompatActivity() {
         }
 
         override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-
         }
+
 
         override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
 
@@ -58,6 +64,8 @@ class QuestionDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_detail)
 
+
+
         // 渡ってきたQuestionのオブジェクトを保持する
         val extras = intent.extras
         mQuestion = extras!!.get("question") as Question
@@ -68,6 +76,11 @@ class QuestionDetailActivity : AppCompatActivity() {
         mAdapter = QuestionDetailListAdapter(this, mQuestion)
         listView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
+
+        //クリックで変動するようにした。後はfirebaseを使用する。
+        imageFavorite.setOnClickListener{
+            imageFavorite.setImageResource(R.drawable.ic_star)
+        }
 
         fab.setOnClickListener {
             // ログイン済みのユーザーを取得する
@@ -85,9 +98,15 @@ class QuestionDetailActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+//
+//        imageFavorite.setOnClickListener{
+//            Log.d("test","だっふんだ")
+//        }
+
 
         val dataBaseReference = FirebaseDatabase.getInstance().reference
         mAnswerRef = dataBaseReference.child(ContentsPATH).child(mQuestion.genre.toString()).child(mQuestion.questionUid).child(answersPATH)
         mAnswerRef.addChildEventListener(mEventListener)
     }
 }
+
