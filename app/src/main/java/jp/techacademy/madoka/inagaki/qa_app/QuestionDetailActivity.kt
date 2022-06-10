@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_question_detail.*
 import kotlinx.android.synthetic.main.list_question_detail.*
 import kotlinx.android.synthetic.main.list_questions.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class QuestionDetailActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mDataBaseReference: DatabaseReference
@@ -22,6 +23,8 @@ class QuestionDetailActivity : AppCompatActivity() {
     private lateinit var mQuestion: Question
     private lateinit var mAdapter: QuestionDetailListAdapter
     private lateinit var mAnswerRef: DatabaseReference
+    val dataBaseReference = FirebaseDatabase.getInstance().reference
+
 
     private val mEventListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
@@ -72,32 +75,34 @@ class QuestionDetailActivity : AppCompatActivity() {
         // 渡ってきたQuestionのオブジェクトを保持する
         val extras = intent.extras
         mQuestion = extras!!.get("question") as Question
-        val user = FirebaseAuth.getInstance().currentUser
         title = mQuestion.title
 
         // ListViewの準備
         mAdapter = QuestionDetailListAdapter(this, mQuestion)
         listView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
-        //クリックで変動するようにした。後はfirebaseを使用する。
-        imageFavorite.setOnClickListener{
-            imageFavorite.setImageResource(R.drawable.ic_star)
-            // アカウント作成の時は表示名をFirebaseに保存する
-            val dataBaseReference = FirebaseDatabase.getInstance().reference
 
-            //ログイン中のユーザーidを取得する
-            val user = FirebaseAuth.getInstance().currentUser
-            val uid = user?.uid
-            val Favorite = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)
+        //クリックで変動するようにした。後はfirebaseを使用する。
+        imageFavorite.setImageResource(R.drawable.ic_star)
+        // アカウント作成の時は表示名をFirebaseに保存する
+
+        val userFavorite = FirebaseAuth.getInstance().currentUser
+        val uid = userFavorite?.uid
+        //ログイン中のユーザーidを取得する
+        val Favorite = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)
+
+        imageFavorite.setOnClickListener{
+
 
             //↓uidは質問者のidになってしまうのでログイン中のidに直す必要がある
             //val Favorite = dataBaseReference.child(FavoritePATH).child(mQuestion.uid).child(mQuestion.questionUid)
 
-            val data = HashMap<String, Boolean>()
-            data["favorite"] = true
+            val data = HashMap<String, Int>()
+            data["userfavorite"] = 1
             //setValueメソッドはkeyにvalueを保存する場合に使用
             Favorite.setValue(data)
         }
+
 
         fab.setOnClickListener {
             // ログイン済みのユーザーを取得する
