@@ -128,6 +128,7 @@ class QuestionSendActivity : AppCompatActivity(), View.OnClickListener, Database
             }
             //送信ボタンがタップされた時の処理
         } else if (v === sendButton) {
+            
             // キーボードが出てたら閉じる
             val im = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             im.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS)
