@@ -18,6 +18,10 @@ import kotlinx.android.synthetic.main.list_questions.*
 class QuestionDetailActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mDataBaseReference: DatabaseReference
+
+    //favorite内にあるかどうかをあらわす変数
+    private var mIsFavorite = false
+
 //質問の詳細画面――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――●
 
     private lateinit var mQuestion: Question
@@ -27,19 +31,21 @@ class QuestionDetailActivity : AppCompatActivity() {
 
 
     private val mEventListener = object : ChildEventListener {
+        //こいつがdatabase内を監視してくれる?
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-
-
             val map = dataSnapshot.value as Map<*, *>
 
             val answerUid = dataSnapshot.key ?: ""
 
             for (answer in mQuestion.answers) {
-                // 同じAnswerUidのものが存在しているときは何もしない
+                //同じAnswerUidのものが存在しているときは何もしない
+                //これがないと1つずつ追加して繰り返すので同じ回答がダブりまくる？
                 if (answerUid == answer.answerUid) {
                     return
                 }
             }
+
+            mIsFavorite = true
 
             val body = map["body"] as? String ?: ""
             val name = map["name"] as? String ?: ""
@@ -84,7 +90,7 @@ class QuestionDetailActivity : AppCompatActivity() {
 
         //クリックで変動するようにした。後はfirebaseを使用する。
         imageFavorite.setImageResource(R.drawable.ic_star)
-        // アカウント作成の時は表示名をFirebaseに保存する
+        //ログイン中のユーザーidを取得する
 
         val userFavorite = FirebaseAuth.getInstance().currentUser
         val uid = userFavorite?.uid
@@ -104,6 +110,7 @@ class QuestionDetailActivity : AppCompatActivity() {
         }
 
 
+
         fab.setOnClickListener {
             // ログイン済みのユーザーを取得する
             val user = FirebaseAuth.getInstance().currentUser
@@ -121,11 +128,6 @@ class QuestionDetailActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-//
-//        imageFavorite.setOnClickListener{
-//            Log.d("test","だっふんだ")
-//        }
-
 
         val dataBaseReference = FirebaseDatabase.getInstance().reference
         mAnswerRef = dataBaseReference.child(ContentsPATH).child(mQuestion.genre.toString()).child(mQuestion.questionUid).child(answersPATH)
