@@ -106,12 +106,10 @@ class QuestionDetailActivity : AppCompatActivity() {
             data["userfavorite"] = 1
             //setValueメソッドはkeyにvalueを保存する場合に使用
             Favorite.setValue(data)
-            
 
         }
 
-
-
+        
         fab.setOnClickListener {
             // ログイン済みのユーザーを取得する
             val user = FirebaseAuth.getInstance().currentUser
