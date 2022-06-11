@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_question_detail.view.*
+import kotlinx.android.synthetic.main.list_question_detail.*
 import kotlinx.android.synthetic.main.list_question_detail.view.*
 
 class QuestionDetailListAdapter(context: Context, private val mQustion: Question) : BaseAdapter() {
@@ -50,6 +52,8 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
         return 0
     }
 
+
+
     //getItemViewTypeで返ってきたtypeで質問か回答か判断
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var convertView = view
@@ -58,9 +62,11 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
             if (convertView == null) {
                 //質問だったらlist_question_detail適用
                 convertView = mLayoutInflater!!.inflate(R.layout.list_question_detail, parent, false)!!
+
             }
             val body = mQustion.body
             val name = mQustion.name
+
 
             val bodyTextView = convertView.bodyTextView as TextView
             bodyTextView.text = body
@@ -68,12 +74,18 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
             val nameTextView = convertView.nameTextView as TextView
             nameTextView.text = name
 
+//            すごいねばったやつ　favoriteのソース指定――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
+//
+//            val favorite = convertView.imageFavorite as ImageView
+//            favorite.setImageResource(R.drawable.ic_star)
+
             val bytes = mQustion.imageBytes
             if (bytes.isNotEmpty()) {
                 val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size).copy(Bitmap.Config.ARGB_8888, true)
                 val imageView = convertView.findViewById<View>(R.id.imageView) as ImageView
                 imageView.setImageBitmap(image)
             }
+
         } else {
             if (convertView == null) {
                 //回答だったらlist_answer適用

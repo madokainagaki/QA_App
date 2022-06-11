@@ -99,7 +99,6 @@ class QuestionDetailActivity : AppCompatActivity() {
 
         imageFavorite.setOnClickListener{
 
-
             //↓uidは質問者のidになってしまうのでログイン中のidに直す必要がある
             //val Favorite = dataBaseReference.child(FavoritePATH).child(mQuestion.uid).child(mQuestion.questionUid)
 
@@ -107,6 +106,8 @@ class QuestionDetailActivity : AppCompatActivity() {
             data["userfavorite"] = 1
             //setValueメソッドはkeyにvalueを保存する場合に使用
             Favorite.setValue(data)
+            
+
         }
 
 
