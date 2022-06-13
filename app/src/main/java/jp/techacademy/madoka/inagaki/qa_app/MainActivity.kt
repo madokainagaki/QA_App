@@ -128,8 +128,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             } else {
                 // ジャンルを渡して質問作成画面を起動する
-                val intent = Intent(applicationContext, QuestionSendActivity::class.java)
-                intent.putExtra("genre", mGenre)
+                val intent = Intent(applicationContext, FavoriteActivity::class.java)
+//                intent.putExtra("genre", mGenre)
                 startActivity(intent)
             }
         }

@@ -45,8 +45,6 @@ class QuestionDetailActivity : AppCompatActivity() {
                 }
             }
 
-            mIsFavorite = true
-
             val body = map["body"] as? String ?: ""
             val name = map["name"] as? String ?: ""
             val uid = map["uid"] as? String ?: ""
@@ -56,6 +54,29 @@ class QuestionDetailActivity : AppCompatActivity() {
             mAdapter.notifyDataSetChanged()
         }
 
+        override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+
+        }
+
+        override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+        }
+
+
+        override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
+
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+
+        }
+    }
+
+    private val favoriteListener = object : ChildEventListener {
+        override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+            mIsFavorite = true
+            Log.d("test", "お気に入り")
+            imageFavorite.setImageResource(R.drawable.ic_star)
+        }
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
 
         }
@@ -88,28 +109,39 @@ class QuestionDetailActivity : AppCompatActivity() {
         listView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
 
-        //クリックで変動するようにした。後はfirebaseを使用する。
-        imageFavorite.setImageResource(R.drawable.ic_star)
         //ログイン中のユーザーidを取得する
 
         val userFavorite = FirebaseAuth.getInstance().currentUser
         val uid = userFavorite?.uid
         //ログイン中のユーザーidを取得する
         val Favorite = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)
+        val Favorite2 = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)
+        Log.d("test6",Favorite2.toString())
+        //Favoriteにデータが追加・削除されたときfavoriteリスナーが反応してくれる
+        Favorite.addChildEventListener(favoriteListener)
 
         imageFavorite.setOnClickListener{
 
             //↓uidは質問者のidになってしまうのでログイン中のidに直す必要がある
             //val Favorite = dataBaseReference.child(FavoritePATH).child(mQuestion.uid).child(mQuestion.questionUid)
 
-            val data = HashMap<String, Int>()
-            data["userfavorite"] = 1
-            //setValueメソッドはkeyにvalueを保存する場合に使用
-            Favorite.setValue(data)
+            if (mIsFavorite) {
 
+                Favorite.removeValue()
+                imageFavorite.setImageResource(R.drawable.ic_star_border)
+                mIsFavorite = false
+
+            }else {
+                val data = HashMap<String, Int>()
+                data["userfavorite"] = 1
+                //setValueメソッドはkeyにvalueを保存する場合に使用
+                Favorite.setValue(data)
+                imageFavorite.setImageResource(R.drawable.ic_star)
+                mIsFavorite = true
+            }
         }
 
-        
+
         fab.setOnClickListener {
             // ログイン済みのユーザーを取得する
             val user = FirebaseAuth.getInstance().currentUser
