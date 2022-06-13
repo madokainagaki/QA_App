@@ -30,10 +30,11 @@ class FavoriteActivity : AppCompatActivity() {
 
         mAdapter = QuestionsListAdapter(this)
 
-        val list2 = arrayListOf("bb1", "bb2", "bb3")
-        val list3 = arrayListOf("cc1", "cc2", "cc3")
-        mQuestionArrayList.addAll(list2)
-        mQuestionArrayList.addAll(list3)
+
+//        var list1 = ArrayList<Question>()
+        val list1 : ArrayList<Question> = arrayListOf("aaa","bbb","ccc")
+
+        mQuestionArrayList.addAll(list1)
 
         mAdapter = QuestionsListAdapter(this)
         mQuestionArrayList = ArrayList<Question>()
@@ -41,5 +42,6 @@ class FavoriteActivity : AppCompatActivity() {
         }
 
 }
+
 
 
