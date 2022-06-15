@@ -45,12 +45,13 @@ class FavoriteActivity : AppCompatActivity() {
 
             val question1 = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
 
+            Log.d("test3",question1.title)
             mQuestionArrayList.add(question1)
             mAdapter.notifyDataSetChanged()
 
             val key = dataSnapshot.key ?: ""
-            Log.d("test2",key)
-            Log.d("test2",map["title"].toString())
+//            Log.d("test2",key)
+//            Log.d("test2",map["title"].toString())
 
         }
 
