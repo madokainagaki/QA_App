@@ -105,79 +105,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    val favariteArrayList = ArrayList<String>()
     private val mFavoriteListener = object : ChildEventListener {
-        override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-            val map = dataSnapshot.value as Map<String, String>
-            val title = map["title"] ?: ""
-            val body = map["body"] ?: ""
-            val name = map["name"] ?: ""
-            val uid = map["uid"] ?: ""
-            val imageString = map["image"] ?: ""
-            val bytes =
-                if (imageString.isNotEmpty()) {
-                    Base64.decode(imageString, Base64.DEFAULT)
-                } else {
-                    byteArrayOf()
-                }
-
-            val answerArrayList = ArrayList<Answer>()
-            val answerMap = map["answers"] as Map<String, String>?
-            if (answerMap != null) {
-                for (key in answerMap.keys) {
-                    val temp = answerMap[key] as Map<String, String>
-                    val answerBody = temp["body"] ?: ""
-                    val answerName = temp["name"] ?: ""
-                    val answerUid = temp["uid"] ?: ""
-                    val answer = Answer(answerBody, answerName, answerUid, key)
-                    answerArrayList.add(answer)
-                }
-            }
-
-            val favoriteQuestion = Question(title, body, name, uid, dataSnapshot.key ?: "",
-                mGenre, bytes, answerArrayList)
-            mQuestionArrayList.add(favoriteQuestion)
-            Log.d("testy2",favoriteQuestion.toString())
-            mAdapter.notifyDataSetChanged()
+        override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+            Log.d("test3","変更があった")
+            val map = dataSnapshot.value as Map<*, *>
+            favariteArrayList.add(map.toString())
+            Log.d("test3",map[1].toString())
         }
 
-        override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
-            val map = dataSnapshot.value as Map<String, String>
-
-            // 変更があったQuestionを探す
-            for (question in mQuestionArrayList) {
-                if (dataSnapshot.key.equals(question.questionUid)) {
-                    // このアプリで変更がある可能性があるのは回答（Answer)のみ
-                    question.answers.clear()
-                    val answerMap = map["answers"] as Map<String, String>?
-                    if (answerMap != null) {
-                        for (key in answerMap.keys) {
-                            val temp = answerMap[key] as Map<String, String>
-                            val answerBody = temp["body"] ?: ""
-                            val answerName = temp["name"] ?: ""
-                            val answerUid = temp["uid"] ?: ""
-                            val answer = Answer(answerBody, answerName, answerUid, key)
-                            question.answers.add(answer)
-                        }
-                    }
-
-                    mAdapter.notifyDataSetChanged()
-                }
-            }
+        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
         }
 
-        override fun onChildRemoved(p0: DataSnapshot) {
-
+        override fun onChildRemoved(snapshot: DataSnapshot) {
         }
 
-        override fun onChildMoved(p0: DataSnapshot, p1: String?) {
-
+        override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
         }
 
-        override fun onCancelled(p0: DatabaseError) {
-
+        override fun onCancelled(error: DatabaseError) {
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -299,7 +247,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mGenreRef = mDatabaseReference.child(ContentsPATH).child(mGenre.toString())
         mGenreRef!!.addChildEventListener(mEventListener)
 
-        mFavoriteRef = mDatabaseReference.child(FavoritePATH).child(uid)
+        mFavoriteRef = mDatabaseReference.child(FavoritePATH)
         Log.d("test2",mFavoriteRef.toString())
         mFavoriteRef!!.addChildEventListener(mFavoriteListener)
 
