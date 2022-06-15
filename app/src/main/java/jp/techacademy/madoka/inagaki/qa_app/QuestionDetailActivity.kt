@@ -30,20 +30,20 @@ class QuestionDetailActivity : AppCompatActivity() {
     val dataBaseReference = FirebaseDatabase.getInstance().reference
 
 
-    private val mEventListener = object : ChildEventListener {
-        //こいつがdatabase内を監視してくれる?
-        override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-            val map = dataSnapshot.value as Map<*, *>
+            private val mEventListener = object : ChildEventListener {
+                //こいつがdatabase内を監視してくれる?
+                override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                    val map = dataSnapshot.value as Map<*, *>
 
-            val answerUid = dataSnapshot.key ?: ""
+                    val answerUid = dataSnapshot.key ?: ""
 
-            for (answer in mQuestion.answers) {
-                //同じAnswerUidのものが存在しているときは何もしない
-                //これがないと1つずつ追加して繰り返すので同じ回答がダブりまくる？
-                if (answerUid == answer.answerUid) {
-                    return
-                }
-            }
+                    for (answer in mQuestion.answers) {
+                        //同じAnswerUidのものが存在しているときは何もしない
+                        //これがないと1つずつ追加して繰り返すので同じ回答がダブりまくる？
+                        if (answerUid == answer.answerUid) {
+                            return
+                        }
+                    }
 
             val body = map["body"] as? String ?: ""
             val name = map["name"] as? String ?: ""

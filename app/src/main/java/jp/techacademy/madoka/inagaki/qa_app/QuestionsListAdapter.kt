@@ -49,7 +49,7 @@ class QuestionsListAdapter(context: Context) : BaseAdapter() {
         val resText = convertView.resTextView as TextView
         //answers.size　アンサーの項目数
         val resNum = mQuestionArrayList[position].answers.size
-        resText.text = "回答数:$resNum".toString()
+        resText.text = "回答数:$resNum"
 
         val bytes = mQuestionArrayList[position].imageBytes
         if (bytes.isNotEmpty()) {
