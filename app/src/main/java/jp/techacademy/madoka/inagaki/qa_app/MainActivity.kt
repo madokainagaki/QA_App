@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             question.answers.add(answer)
                         }
                     }
-
                     mAdapter.notifyDataSetChanged()
                 }
             }
@@ -111,10 +110,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Log.d("test3","変更があった")
             val map = dataSnapshot.value as Map<*, *>
             favariteArrayList.add(map.toString())
-            Log.d("test3",map[1].toString())
+            Log.d("test3",map.toString())
         }
 
-        override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+        override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                Log.d("test3","変更があった")
+                val map = dataSnapshot.value as Map<*, *>
+                favariteArrayList.add(map.toString())
+                Log.d("test3",map.toString())
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
