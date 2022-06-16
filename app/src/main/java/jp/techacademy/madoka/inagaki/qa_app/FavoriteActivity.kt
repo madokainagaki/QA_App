@@ -52,9 +52,7 @@ class FavoriteActivity : AppCompatActivity() {
             val key = dataSnapshot.key ?: ""
 //            Log.d("test2",key)
 //            Log.d("test2",map["title"].toString())
-
         }
-
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
 
         }

@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var mGenre = 0
     private var uid = ""
 
+
     // --- ここから ---
 //    プロパティとしてFirebaseへのアクセスに必要なDatabaseReferenceクラス
     private lateinit var mDatabaseReference: DatabaseReference
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val question = Question(title, body, name, uid, dataSnapshot.key ?: "",
                 mGenre, bytes, answerArrayList)
             mQuestionArrayList.add(question)
-            Log.d("test2",mQuestionArrayList.toString())
+            Log.d("test2",mQuestionArrayList[0].title.toString())
             mAdapter.notifyDataSetChanged()
         }
 
@@ -107,17 +108,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val favariteArrayList = ArrayList<String>()
     private val mFavoriteListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            Log.d("test3","変更があった")
             val map = dataSnapshot.value as Map<*, *>
-            favariteArrayList.add(map.toString())
-            Log.d("test3",map.toString())
+            val mapKey = map.keys.toString()
+                Log.d("test80",dataSnapshot.toString())
+                Log.d("test80",mapKey)
+//            for (key in mapKey){
+////                Log.d("test80",mapKey.toString())
+//            }
+
+            mAdapter.notifyDataSetChanged()
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                Log.d("test3","変更があった")
                 val map = dataSnapshot.value as Map<*, *>
-                favariteArrayList.add(map.toString())
-                Log.d("test3",map.toString())
+                val mapKey = map.keys.toString()
+                favariteArrayList.add(mapKey)
+                Log.d("test802",favariteArrayList[0])
+                mAdapter.notifyDataSetChanged()
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -155,8 +162,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             } else {
                 // ジャンルを渡して質問作成画面を起動する
-                val intent = Intent(applicationContext, FavoriteActivity::class.java)
-                intent.putExtra("genre", mGenre.toString().toInt())
+//                val intent = Intent(applicationContext, FavoriteActivity::class.java)
+//                intent.putExtra("genre", mGenre.toString().toInt())
+//                startActivity(intent)
+                val intent = Intent(applicationContext, QuestionSendActivity::class.java)
+                intent.putExtra("genre", mGenre)
                 startActivity(intent)
             }
         }
@@ -188,7 +198,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val userFavorite = FirebaseAuth.getInstance().currentUser
         uid = userFavorite?.uid.toString()
         Log.d("test2",uid)
-
     }
 
     override fun onResume() {
@@ -233,6 +242,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else if (id == R.id.nav_computer) {
             toolbar.title = getString(R.string.menu_computer_label)
             mGenre = 4
+        } else if (id == R.id.nav_favorite) {
+
+            // ログイン済みのユーザーを取得する
+            val user = FirebaseAuth.getInstance().currentUser
+
+            if (user == null) {
+                // ログインしていなければ
+
+                val intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(intent)
+
+            }else {
+                val intent = Intent(applicationContext, FavoriteActivity::class.java)
+                intent.putExtra("genre", mGenre.toString().toInt())
+                startActivity(intent)
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -250,12 +275,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         mGenreRef = mDatabaseReference.child(ContentsPATH).child(mGenre.toString())
         mGenreRef!!.addChildEventListener(mEventListener)
 
-        mFavoriteRef = mDatabaseReference.child(FavoritePATH)
-        Log.d("test2",mFavoriteRef.toString())
+        mFavoriteRef = mDatabaseReference.child(FavoritePATH).child(uid)
+        Log.d("test6",mFavoriteRef.toString())
         mFavoriteRef!!.addChildEventListener(mFavoriteListener)
 
         return true
-
-
     }
 }

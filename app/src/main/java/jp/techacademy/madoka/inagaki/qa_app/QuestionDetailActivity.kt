@@ -74,7 +74,7 @@ class QuestionDetailActivity : AppCompatActivity() {
     private val favoriteListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
             mIsFavorite = true
-            Log.d("test", "お気に入り")
+//            Log.d("test", "お気に入り")
             imageFavorite.setImageResource(R.drawable.ic_star)
         }
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
@@ -116,7 +116,7 @@ class QuestionDetailActivity : AppCompatActivity() {
         //ログイン中のユーザーidを取得する
         val Favorite = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)
         val Favorite2 = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)
-        Log.d("test6",Favorite2.toString())
+//        Log.d("test6",Favorite2.toString())
         //Favoriteにデータが追加・削除されたときfavoriteリスナーが反応してくれる
         Favorite.addChildEventListener(favoriteListener)
 
