@@ -108,10 +108,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val favariteArrayList = ArrayList<String>()
     private val mFavoriteListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            val map = dataSnapshot.value as Map<*, *>
-            val mapKey = map.keys.toString()
-                Log.d("test80",dataSnapshot.toString())
-                Log.d("test80",mapKey)
+            val map = dataSnapshot.key.toString()
+            favariteArrayList.add(map)
+                Log.d("test80",dataSnapshot.key.toString())
+                Log.d("test80",favariteArrayList.toString())
 //            for (key in mapKey){
 ////                Log.d("test80",mapKey.toString())
 //            }
@@ -120,11 +120,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                val map = dataSnapshot.value as Map<*, *>
-                val mapKey = map.keys.toString()
-                favariteArrayList.add(mapKey)
-                Log.d("test802",favariteArrayList[0])
-                mAdapter.notifyDataSetChanged()
+//                val map = dataSnapshot.value as Map<*, *>
+//                val mapKey = map.keys.toString()
+//                favariteArrayList.add(mapKey)
+//                Log.d("test802",favariteArrayList[0])
+//                mAdapter.notifyDataSetChanged()
+            val map = dataSnapshot.key.toString()
+            favariteArrayList.add(map)
+            Log.d("test80",dataSnapshot.key.toString())
+            Log.d("test80",favariteArrayList.toString())
+
+            mAdapter.notifyDataSetChanged()
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
