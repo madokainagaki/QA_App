@@ -45,15 +45,15 @@ class FavoriteActivity : AppCompatActivity() {
                 }
             }
 
-            val sp2 = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            val name = sp2.getString(favoriteQuestion, "")
-            Log.d("test8name2",name)
+            val aiueo = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            val bbb = aiueo.getString(favoriteQuestion, "")
+            Log.d("test8name2",bbb)
 
 //            val question1 = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
             val question1 = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
 
-            if (name != null) {
-                val aaa = name.contains("-N4BEp5_jk2jMfHSIHPF")
+            if (bbb != null) {
+                val aaa = bbb.contains("-N4BEp5_jk2jMfHSIHPF")
                 if (aaa){
                     mQuestionArrayList.add(question1)
                 }
