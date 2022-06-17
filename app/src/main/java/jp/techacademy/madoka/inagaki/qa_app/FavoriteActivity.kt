@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.preference.PreferenceManager
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -35,18 +36,32 @@ class FavoriteActivity : AppCompatActivity() {
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
 
             val map = dataSnapshot.value as Map<*, *>
-
             val answers = arrayListOf<Answer>()
-            val answerMap = map["answers"] as Map<*, *>
+            val answerMap = map["answers"] as Map<*, *>?
+            if (answerMap != null){
             for (key in answerMap.keys){
-                val answer = Answer("","","","")
-                answers.add(answer)
+                    val answer = Answer("","","","")
+                    answers.add(answer)
+                }
             }
 
+            val sp2 = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            val name = sp2.getString(favoriteQuestion, "")
+            Log.d("test8name2",name)
+
+//            val question1 = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
             val question1 = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
 
-            Log.d("test3",question1.title)
-            mQuestionArrayList.add(question1)
+            if (name != null) {
+                val aaa = name.contains("-N4BEp5_jk2jMfHSIHPF")
+                if (aaa){
+                    mQuestionArrayList.add(question1)
+                }
+            }
+
+
+//            Log.d("test3",question1.title)
+//            mQuestionArrayList.add(question1)
             mAdapter.notifyDataSetChanged()
 
             val key = dataSnapshot.key ?: ""

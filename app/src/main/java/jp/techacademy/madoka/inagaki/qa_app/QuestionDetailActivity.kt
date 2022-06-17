@@ -134,6 +134,7 @@ class QuestionDetailActivity : AppCompatActivity() {
             }else {
                 val data = HashMap<String, Int>()
                 data["userfavorite"] = 1
+                
                 //setValueメソッドはkeyにvalueを保存する場合に使用
                 Favorite.setValue(data)
                 imageFavorite.setImageResource(R.drawable.ic_star)

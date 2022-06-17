@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.preference.PreferenceManager
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -115,6 +116,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 //            for (key in mapKey){
 ////                Log.d("test80",mapKey.toString())
 //            }
+
+            val sp2 = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            val editor = sp2.edit()
+            editor.putString(favoriteQuestion, favariteArrayList.toString())
+            editor.commit()
+
+
+            val name = sp2.getString(favoriteQuestion, "")
+            Log.d("test8name",name)
+
 
             mAdapter.notifyDataSetChanged()
         }
