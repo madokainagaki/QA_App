@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val question = Question(title, body, name, uid, dataSnapshot.key ?: "",
                 mGenre, bytes, answerArrayList)
             mQuestionArrayList.add(question)
-            Log.d("test2",mQuestionArrayList[0].title.toString())
+//            Log.d("test2",mQuestionArrayList[0].title.toString())
             mAdapter.notifyDataSetChanged()
         }
 
@@ -106,39 +106,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    val favariteArrayList = ArrayList<String>()
-    private val mFavoriteListener = object : ChildEventListener {
+        private val mFavoriteListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
             val map = dataSnapshot.key.toString()
             favariteArrayList.add(map)
-                Log.d("test80",dataSnapshot.key.toString())
                 Log.d("test80",favariteArrayList.toString())
+            mAdapter.notifyDataSetChanged()
 //            for (key in mapKey){
 ////                Log.d("test80",mapKey.toString())
 //            }
 
-            val sp2 = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            val editor = sp2.edit()
-            editor.putString(favoriteQuestion, favariteArrayList.toString())
-            editor.commit()
+//            val sp2 = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+//            val editor = sp2.edit()
+//            editor.putString(favoriteQuestion, favariteArrayList.toString())
+//            editor.commit()
+
+//            val name = sp2.getString(favoriteQuestion, "")
+//            Log.d("test8name",name)
 
 
-            val name = sp2.getString(favoriteQuestion, "")
-            Log.d("test8name",name)
-
-
-            mAdapter.notifyDataSetChanged()
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-//                val map = dataSnapshot.value as Map<*, *>
-//                val mapKey = map.keys.toString()
-//                favariteArrayList.add(mapKey)
-//                Log.d("test802",favariteArrayList[0])
-//                mAdapter.notifyDataSetChanged()
             val map = dataSnapshot.key.toString()
+
             favariteArrayList.add(map)
-            Log.d("test80",dataSnapshot.key.toString())
             Log.d("test80",favariteArrayList.toString())
 
             mAdapter.notifyDataSetChanged()
@@ -246,8 +238,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-
         if (id == R.id.nav_hobby) {
+
             toolbar.title = getString(R.string.menu_hobby_label)
             mGenre = 1
         } else if (id == R.id.nav_life) {
@@ -283,6 +275,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // 質問のリストをクリアしてから再度Adapterにセットし、AdapterをListViewにセットし直す
         mQuestionArrayList.clear()
         mAdapter.setQuestionArrayList(mQuestionArrayList)
+        Log.d("test2",mQuestionArrayList.toString())
         listView.adapter = mAdapter
 
         // 選択したジャンルにリスナーを登録する
