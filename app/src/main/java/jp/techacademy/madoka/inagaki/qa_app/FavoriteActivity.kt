@@ -11,6 +11,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.preference.PreferenceManager
+import com.google.android.gms.common.util.ArrayUtils.contains
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +26,7 @@ class FavoriteActivity : AppCompatActivity() {
 
 //    mQuestionArrayListにお気に入りを入れる
     var mQuestionArrayList = ArrayList<Question>()
+    var questionArrayList = ArrayList<String>()
 
     private lateinit var mAdapter: QuestionsListAdapter
     private lateinit var mQuestionRef: DatabaseReference
@@ -34,6 +36,7 @@ class FavoriteActivity : AppCompatActivity() {
 
     private val questionListener = object : ChildEventListener {
         override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+            val mp = dataSnapshot.key.toString()
 
             val map = dataSnapshot.value as Map<*, *>
             val answers = arrayListOf<Answer>()
@@ -45,28 +48,29 @@ class FavoriteActivity : AppCompatActivity() {
                 }
             }
 
-            val aiueo = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-            val bbb = aiueo.getString(favoriteQuestion, "")
-            Log.d("test8name2",bbb)
+            //questionArrayList - これが選択されたジャンル内の全ての質問
+            questionArrayList.add(mp)
+            Log.d("test2-6", questionArrayList.toString())
+            Log.d("test2-6map", map.toString())
 
-//            val question1 = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
-            val question1 = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
+            //favoriteArrayList - これがお気に入りされている質問
+//            val list1 = favariteArrayList[0]
+            Log.d("test2-66", favariteArrayList.toString())
 
-            if (bbb != null) {
-                val aaa = bbb.contains("-N4BEp5_jk2jMfHSIHPF")
-                if (aaa){
-                    mQuestionArrayList.add(question1)
+//            val aaa = questionArrayList.contains(list1)
+//            Log.d("test2-67",aaa.toString() )
+
+            val question = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
+
+            for (i in favariteArrayList) {
+                val list = questionArrayList.contains(i)
+                if (list){
+                    mQuestionArrayList.add(question)
                 }
+
             }
-
-
-//            Log.d("test3",question1.title)
-//            mQuestionArrayList.add(question1)
             mAdapter.notifyDataSetChanged()
 
-            val key = dataSnapshot.key ?: ""
-//            Log.d("test2",key)
-//            Log.d("test2",map["title"].toString())
         }
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
 
@@ -93,34 +97,10 @@ class FavoriteActivity : AppCompatActivity() {
         val uid = userFavorite?.uid
 
         var mGenre =intent.getIntExtra("genre",0)
-        Log.d("test2",mGenre.toString())
 
         mAdapter = QuestionsListAdapter(this)
         mQuestionArrayList = ArrayList<Question>()
         mAdapter.notifyDataSetChanged()
-
-//        var list1 = ArrayList<Question>()
-//        val question1 = Question("list1","bbb","ccc", "uid1", "questionUid1", 1, ByteArray(0), arrayListOf<Answer>())
-//        val question2 = Question("list2","bbb","ccc", "uid1", "questionUid1", 1, ByteArray(0), arrayListOf<Answer>())
-//        val question3 = Question("list3","bbb","ccc", "uid1", "questionUid1", 1, ByteArray(0), arrayListOf<Answer>())
-//        val question4 = Question("list4","bbb","ccc", "uid1", "questionUid1", 1, ByteArray(0), arrayListOf<Answer>())
-//        val list1 : ArrayList<Question> = arrayListOf(question1,question2,question3,question4)
-//        val list2 : ArrayList<Question> = arrayListOf(question1,question4)
-
-//        val favoriteList : ArrayList<Question> = arrayListOf()
-//        favoriteList.add(question1)
-//        favoriteList.add(question2)
-//        mQuestionArrayList.addAll(favoriteList)
-//
-//        //list2と比べる実装をする。
-//
-//
-//        Log.d("test4",list1.size.toString())
-//        Log.d("test4",list1.toString())
-//        Log.d("test4",list2.toString())
-//        Log.d("test4",list1.contains(question2).toString())
-//        Log.d("test4",list2.contains(question2).toString())
-
 
         mAdapter.setQuestionArrayList(mQuestionArrayList)
         FavoriteListView.adapter = mAdapter
@@ -130,9 +110,6 @@ class FavoriteActivity : AppCompatActivity() {
         mQuestionRef = dataBaseReference.child(ContentsPATH).child(mGenre.toString())
         mQuestionRef.addChildEventListener(questionListener)
 
-//        //ログイン中のユーザーidを取得する
-//        val Favorite = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)
-//        Log.d("test2",Favorite.toString())
     }
 }
 
