@@ -18,7 +18,4 @@ const val NameKEY = "name"
 //preferenceに表示名を保存する時のキー
 const val favoriteQuestion = "favoriteQuestion"
 
-//定数を集める
-//firebase　ツリー上　パス道順 階層構造で扱う
-
 val favariteArrayList = ArrayList<String>()

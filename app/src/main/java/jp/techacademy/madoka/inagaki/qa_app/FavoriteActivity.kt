@@ -50,16 +50,6 @@ class FavoriteActivity : AppCompatActivity() {
 
             //questionArrayList - これが選択されたジャンル内の全ての質問
             questionArrayList.add(mp)
-            Log.d("test6-questionArrayList", questionArrayList.toString())
-            Log.d("test6-mp", mp.toString())
-
-            //favoriteArrayList - これがお気に入りされている質問
-//            val list1 = favariteArrayList[0]
-            Log.d("test6-faveritearrayList", favariteArrayList.toString())
-
-//            val aaa = questionArrayList.contains(list1)
-//            Log.d("test2-67",aaa.toString() )
-
             val question = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
 
             if(favariteArrayList.contains(mp)) {

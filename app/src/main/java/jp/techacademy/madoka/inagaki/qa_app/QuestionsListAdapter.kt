@@ -47,7 +47,7 @@ class QuestionsListAdapter(context: Context) : BaseAdapter() {
         nameText.text = mQuestionArrayList[position].name
 
         val resText = convertView.resTextView as TextView
-        //answers.size　アンサーの項目数
+
         val resNum = mQuestionArrayList[position].answers.size
         resText.text = "回答数:$resNum"
 

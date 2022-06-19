@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.list_question_detail.view.*
 
 class QuestionDetailListAdapter(context: Context, private val mQustion: Question) : BaseAdapter() {
     companion object {
-        //どのレイアウトを使うか判断させるための定数
         private val TYPE_QUESTION = 0
         private val TYPE_ANSWER = 1
     }
@@ -32,7 +31,6 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
     }
 
     override fun getItemViewType(position: Int): Int {
-        //渡ってきた引数がポジション0(一行目)ならtype_questionを返す
         return if (position == 0) {
             TYPE_QUESTION
         } else {
@@ -52,15 +50,11 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
         return 0
     }
 
-
-
-    //getItemViewTypeで返ってきたtypeで質問か回答か判断
     override fun getView(position: Int, view: View?, parent: ViewGroup): View {
         var convertView = view
 
         if (getItemViewType(position) == TYPE_QUESTION) {
             if (convertView == null) {
-                //質問だったらlist_question_detail適用
                 convertView = mLayoutInflater!!.inflate(R.layout.list_question_detail, parent, false)!!
 
             }
@@ -74,11 +68,6 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
             val nameTextView = convertView.nameTextView as TextView
             nameTextView.text = name
 
-//            すごいねばったやつ　favoriteのソース指定――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――
-//
-//            val favorite = convertView.imageFavorite as ImageView
-//            favorite.setImageResource(R.drawable.ic_star)
-
             val bytes = mQustion.imageBytes
             if (bytes.isNotEmpty()) {
                 val image = BitmapFactory.decodeByteArray(bytes, 0, bytes.size).copy(Bitmap.Config.ARGB_8888, true)
@@ -88,7 +77,6 @@ class QuestionDetailListAdapter(context: Context, private val mQustion: Question
 
         } else {
             if (convertView == null) {
-                //回答だったらlist_answer適用
                 convertView = mLayoutInflater!!.inflate(R.layout.lsit_answer, parent, false)!!
             }
 
