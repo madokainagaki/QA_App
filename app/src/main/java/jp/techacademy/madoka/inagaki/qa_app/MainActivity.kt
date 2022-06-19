@@ -128,12 +128,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            val map = dataSnapshot.key.toString()
-
-            favariteArrayList.add(map)
-            Log.d("test80",favariteArrayList.toString())
-
-            mAdapter.notifyDataSetChanged()
         }
 
         override fun onChildRemoved(snapshot: DataSnapshot) {
@@ -287,6 +281,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         mFavoriteRef = mDatabaseReference.child(FavoritePATH).child(uid)
         Log.d("test6",mFavoriteRef.toString())
+        favariteArrayList.clear()
         mFavoriteRef!!.addChildEventListener(mFavoriteListener)
 
         return true

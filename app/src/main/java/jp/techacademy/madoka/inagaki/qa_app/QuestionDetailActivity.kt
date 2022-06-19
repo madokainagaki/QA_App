@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
@@ -109,9 +110,13 @@ class QuestionDetailActivity : AppCompatActivity() {
         listView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
 
-        //ログイン中のユーザーidを取得する
-
         val userFavorite = FirebaseAuth.getInstance().currentUser
+        if (userFavorite == null){
+            imageFavorite.visibility = View.GONE
+        }else{
+            imageFavorite.visibility = View.VISIBLE
+        }
+
         val uid = userFavorite?.uid
         //ログイン中のユーザーidを取得する
         val Favorite = dataBaseReference.child(FavoritePATH).child(uid.toString()).child(mQuestion.questionUid)

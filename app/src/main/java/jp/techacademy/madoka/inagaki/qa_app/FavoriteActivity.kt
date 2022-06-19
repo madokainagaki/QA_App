@@ -62,15 +62,11 @@ class FavoriteActivity : AppCompatActivity() {
 
             val question = Question(map["title"].toString(),"bbb",map["name"].toString(), "uid1", "questionUid1", 1, ByteArray(0), answers )
 
-            for (i in favariteArrayList) {
-                val list = mp.contains(i)
-                if (list){
-                    mQuestionArrayList.add(question)
-                }
-
+            if(favariteArrayList.contains(mp)) {
+                mQuestionArrayList.add(question)
             }
-            mAdapter.notifyDataSetChanged()
 
+            mAdapter.notifyDataSetChanged()
         }
         override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
 
